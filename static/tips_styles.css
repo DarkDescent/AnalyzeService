@@ -1,0 +1,98 @@
+.tooltip { /* стиль текста, наведя или нажав на который появится пояснение */
+  display: inline-block;
+  position: relative;
+  text-indent: 0px;
+  cursor: help; /* вид курсора */
+}
+.tooltip > span { /* стиль появляющейся подсказки */
+  position: absolute;
+  bottom: 100%;
+  left: -20em; /* = max-width */
+  right: -20em; /* = max-width */
+  width: -moz-max-content;
+  width: -webkit-max-content;
+  width: max-content;  /* ширина подсказки может быть не более содержимого */
+  max-width: 20em;  /* ширина подсказки может быть не более 20em */
+  max-height: 80vh; /* необязательное ограничение по высоте подсказки, 1vh — это 1% от ширины окна */
+  overflow: auto;
+  visibility: hidden;
+  margin: 0 auto .4em; /* поднята на .4em над текстом, наведя или нажав на который появится пояснение */
+  padding: .3em;
+  border: solid rgb(200,200,200);
+  font-size: 90%;
+  background: #fff;
+  line-height: normal;
+  cursor: auto;
+}
+.tooltip.left > span { /* начинается от левого края */
+  left: 0;
+  right: -20em;
+  margin: 0 0 .4em;
+}
+.tooltip.right > span { /* начинается от правого края */
+  left: -20em;
+  right: 0;
+  margin: 0 0 .4em auto;
+}
+.tooltip:after { /* треугольничек под подсказкой; тут тоже везде .4em */
+  content: "";
+  position: absolute;
+  top: -.4em;
+  left: 50%;
+  visibility: hidden;
+  margin: 0 0 0 -.4em;
+  border: .4em solid;
+  border-color: rgb(200,200,200) transparent transparent transparent;
+  cursor: auto;
+}
+.tooltip.left:after {
+  left: 1em;
+}
+.tooltip.right:after {
+  left: auto;
+  right: .6em; /* 1em - .4em */
+}
+.tooltip:before { /* поле между текстом, наведя или нажав на который появится пояснение, и подсказкой нужно чтобы, если перевести курсор мышки на подсказку, та не исчезла; тут тоже везде .4em */
+  content: "";
+  position: absolute;
+  top: -.4em;
+  left: 0;
+  right: 0;
+  height: .4em;
+  visibility: hidden;
+}
+.tooltip:hover > span,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus > span,
+.tooltip:focus:before,
+.tooltip:focus:after {
+  visibility: visible;
+  transition: 0s .4s;
+}
+.tooltip:focus { /* убрать рамку в Хроме */
+  outline: none;
+}
+.tooltip.anim > span,
+.tooltip.anim:after { /* анимация */
+  opacity: 0;
+  transform: translateY(1.5em) scale(.3);
+  transform-origin: center bottom;
+}
+.tooltip.anim:after {
+  transform: translateY(.7em) scale(.3); /* 1.7 = 1.5 / (1.4*2) */
+}
+.tooltip.anim:hover > span,
+.tooltip.anim:hover:after,
+.tooltip.anim:focus > span,
+.tooltip.anim:focus:after {
+  opacity: 1;
+  transition: .6s .4s;
+  transform: translateY(0);
+}
+@media (max-width: 20em) { /* ширина подсказки может быть не более ширины окна браузера */
+  .tooltip > span {
+    max-width: 100vw; /* в 100vw входит полоса прокрутки, но на мобильных она часто отсутствует */
+    box-sizing: border-box;
+  }
+}

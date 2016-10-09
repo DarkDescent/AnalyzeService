@@ -1,0 +1,24 @@
+#LanguageTool
+languagetool:
+  host: localhost
+  port: 8081
+
+#Redis
+redis:
+  host: 10.0.10.204
+  port: 6379
+
+#Name of python-pq queue
+queue:
+  name: high
+
+#Tornado port
+tornado:
+  host: localhost
+  port: 8081
+
+#Proxy data
+proxy:
+  is_using: true
+  host: 10.0.11.119
+  port: 8888
