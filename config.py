@@ -20,3 +20,9 @@ with open("config/main.yml", 'r') as conf_file:
     proxy_host = conf["proxy"]["host"]
     proxy_port = str(conf["proxy"]["port"])
     proxy_is_using = conf["proxy"]["is_using"]
+
+# расширения файлов для модуля patool (ответственнен за разархивирование)
+PATOOL_FILES_EXT = ["7z", "cb7", "ace", "cba", "adf", "alz", "ape", "a", "arc", "arj", "bz2",
+                    "cab", "Z", "cpio", "deb", "dms", "flac", "gz", "iso", "lrz",
+                    "lha", "lhz", "lz", "lzma", "lzo", "rpm", "rar", "cbr", "rz",
+                    "shn", "tar", "cbt", "xz", "zip", "jar", "cbz", "zoo"]

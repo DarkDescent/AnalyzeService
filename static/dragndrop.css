@@ -1,4 +1,4 @@
-#dropZone {
+#dropZone_cluster, #dropZone_cure, #dropZone_classification, #dropZone_neuron{
     color: #555;
     font-size: 18px;
     text-align: center;
@@ -19,17 +19,17 @@
     margin-left: 700px;
 }
 
-#dropZone.hover {
+#dropZone_cluster.hover, #dropZone_cure.hover, #dropZone_classification.hover, #dropZone_neuron.hover{
     background: #ddd;
     border-color: #aaa;
 }
 
-#dropZone.error {
+#dropZone_cluster.error, #dropZone_cure.error, #dropZone_classification.error, #dropZone_neuron.error {
     background: #faa;
     border-color: #f00;
 }
 
-#dropZone.drop {
+#dropZone_cluster.drop, #dropZone_cure.drop, #dropZone_classification.drop, #dropZone_neuron.drop {
     background: #afa;
     border-color: #0f0;
 }
