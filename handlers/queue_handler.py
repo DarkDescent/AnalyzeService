@@ -22,6 +22,11 @@ job_ids = []
 redis = Redis(host=config.redis_host, port=config.redis_port)
 queue = Queue(config.queue_name, connection=redis)
 
+# метод, который будет передан в python-rq для worker-ов
+def analyze(data_origin, method, prefix):
+    pass
+
+
 # класс отвечает за создание задачи и отправки ее в очередь (в случае, если текст был передан не через DragnDrop файла
 class QueueHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):

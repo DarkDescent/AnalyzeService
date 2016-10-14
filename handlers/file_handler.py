@@ -15,7 +15,7 @@ from os.path import expanduser
 import patoolib
 import textract
 import tornado.web
-from queueHandle import analyze
+from handlers.queue_handler import analyze
 from redis import Redis
 from rq import Queue
 from tornado.web import HTTPError
@@ -31,14 +31,13 @@ class FileHandler(tornado.web.RequestHandler):
         tornado.web.RequestHandler.__init__(self, *args, **kwargs)
 
     @staticmethod
-    def prepare_job(file_path, file_name, request_ip, a_ratio, p_check, is_archive, archive_name=u""):
-        from queueHandle import job_ids
+    def prepare_job(file_path, file_name, request_ip, method, p_check, is_archive, archive_name=u""):
+        from handlers.queue_handler import job_ids
         # достаем данные из текста
-        text = textract.process(file_path)
-        # убираем из текста лишние символы (с ними могут начаться ошибки)
-        text = re.sub(ur'\t|\n', u' ', text)
+        with open(file_path) as f:
+            data = f.read()
         # отправляем обработку текста python-rq
-        job = queue.enqueue_call(analyze, args=(text, a_ratio, p_check), result_ttl=-1)
+        job = queue.enqueue_call(analyze, args=(data, method, p_check), result_ttl=-1)
         result = {}
         # узнаем результат создания задачи - если не удалось, то отправляем сообщение об ошибке
         if not job:
@@ -70,7 +69,7 @@ class FileHandler(tornado.web.RequestHandler):
     def load(self):
 
         fileinfo = self.request.files['file'][0]    # получаем всю информацию о файле
-        accuracy_ratio = float(self.get_argument('accuracy'), 0)
+        method = self.get_argument("method")
         prefix_check = bool(int(self.get_argument("is_prefix", default=1)))
         fname = fileinfo['filename']
 
@@ -111,7 +110,7 @@ class FileHandler(tornado.web.RequestHandler):
 
         else:
             # отправляем файл на обработку, если вернули текст, то отправляем его пользователю, в случае неуспеха - отправляем об этом сообщение клиенту
-            resultCheck = self.prepare_job(__UPLOADS__ + u'/' + fname, fname, self.request.remote_ip, accuracy_ratio, prefix_check, False)
+            resultCheck = self.prepare_job(__UPLOADS__ + u'/' + fname, fname, self.request.remote_ip, method, prefix_check, False)
             if resultCheck["text"] == u"":
                 self.finish(u"Не все файлы удалось отправить в очередь")
                 return

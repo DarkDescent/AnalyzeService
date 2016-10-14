@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8075CCCA-4283-485B-9D76-80AFE5987A3A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>utcore</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)tools\;$(SolutionDir)tools\gtest\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)tools\;$(SolutionDir)tools\gtest\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp" />
+    <ClCompile Include="..\ccore\agglomerative.cpp" />
+    <ClCompile Include="..\ccore\hsyncnet.cpp" />
+    <ClCompile Include="..\ccore\kdtree.cpp" />
+    <ClCompile Include="..\ccore\kmedians.cpp" />
+    <ClCompile Include="..\ccore\legion.cpp" />
+    <ClCompile Include="..\ccore\network.cpp" />
+    <ClCompile Include="..\ccore\pcnn.cpp" />
+    <ClCompile Include="..\ccore\som.cpp" />
+    <ClCompile Include="..\ccore\support.cpp" />
+    <ClCompile Include="..\ccore\sync.cpp" />
+    <ClCompile Include="..\ccore\syncnet.cpp" />
+    <ClCompile Include="..\ccore\syncpr.cpp" />
+    <ClCompile Include="..\ccore\xmeans.cpp" />
+    <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="samples.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ccore\adjacency.h" />
+    <ClInclude Include="..\ccore\adjacency_bit_matrix.h" />
+    <ClInclude Include="..\ccore\agglomerative.h" />
+    <ClInclude Include="..\ccore\differential.h" />
+    <ClInclude Include="..\ccore\dynamic_data.h" />
+    <ClInclude Include="..\ccore\ensemble_data.h" />
+    <ClInclude Include="..\ccore\hsyncnet.h" />
+    <ClInclude Include="..\ccore\kdtree.h" />
+    <ClInclude Include="..\ccore\kmedians.h" />
+    <ClInclude Include="..\ccore\legion.h" />
+    <ClInclude Include="..\ccore\network.h" />
+    <ClInclude Include="..\ccore\pcnn.h" />
+    <ClInclude Include="..\ccore\som.h" />
+    <ClInclude Include="..\ccore\support.h" />
+    <ClInclude Include="..\ccore\sync.h" />
+    <ClInclude Include="..\ccore\syncnet.h" />
+    <ClInclude Include="..\ccore\syncpr.h" />
+    <ClInclude Include="..\ccore\xmeans.h" />
+    <ClInclude Include="..\tools\gtest\gtest.h" />
+    <ClInclude Include="samples.h" />
+    <ClInclude Include="utest-adjacency_bit_matrix.h" />
+    <ClInclude Include="utest-agglomerative.h" />
+    <ClInclude Include="utest-differential.h" />
+    <ClInclude Include="utest-hsyncnet.h" />
+    <ClInclude Include="utest-kdtree.h" />
+    <ClInclude Include="utest-kmedians.h" />
+    <ClInclude Include="utest-legion.h" />
+    <ClInclude Include="utest-network.h" />
+    <ClInclude Include="utest-pcnn.h" />
+    <ClInclude Include="utest-som.h" />
+    <ClInclude Include="utest-sync.h" />
+    <ClInclude Include="utest-syncnet.h" />
+    <ClInclude Include="utest-syncpr.h" />
+    <ClInclude Include="utest-xmeans.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
