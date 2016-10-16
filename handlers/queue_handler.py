@@ -18,13 +18,23 @@ from tornado.web import HTTPError
 
 import config
 
+from methods.backpropagation import main
+from methods.cure import cure_new
+from methods.kmeans import kmeans_parallel
+from methods.naivebayes import newsclassifier
+
 job_ids = []
 redis = Redis(host=config.redis_host, port=config.redis_port)
 queue = Queue(config.queue_name, connection=redis)
 
+
 # метод, который будет передан в python-rq для worker-ов
 def analyze(data_origin, method, prefix):
-    pass
+    methods = {"kmeans": kmeans_parallel,
+               "cure": cure_new,
+               "neuron": main,
+               "classification": newsclassifier}
+    return methods.get("method").main()
 
 
 # класс отвечает за создание задачи и отправки ее в очередь (в случае, если текст был передан не через DragnDrop файла

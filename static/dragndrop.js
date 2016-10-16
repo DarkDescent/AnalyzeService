@@ -38,7 +38,7 @@ $(document).ready(function() {
 
         var fd = new FormData();
         fd.append('file', afile);
-        fd.append('method', cluster);
+        fd.append('method', "kmeans");
         $.ajax({
                 xhr: function () {
                     var xhr = new window.XMLHttpRequest();
