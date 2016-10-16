@@ -120,7 +120,7 @@ class Classifier(object):
         return probablity
 
 
-if __name__ == '__main__':
+def main():
     newsTrainer = Trainer(tokenizer)
 
     # You need to train the system passing each text one by one to the trainer module.
@@ -147,22 +147,15 @@ if __name__ == '__main__':
     # When you have sufficient trained data, you are almost done and can start to use
     # a classifier.
     newsClassifier1 = Classifier(newsTrainer.data)
-    newsClassifier2 = Classifier(newsTrainer.data)
 
     # Now you have a classifier which can give a try to classifiy text of news whose
     # category is unknown, yet.
     cur_time = time.time()
     newsClassifier1.parallel_classify("examples/scores_all.csv")
     end_time1 = time.time() - cur_time
-    cur_time = time.time()
-    newsClassifier2.classify("examples/scores_all.csv")
-    end_time2 = time.time() - cur_time
 
-    print "Parallel: ", end_time1
-    print "Sequential: ", end_time2
-
-    # classification = newsClassifier1.results
-    # the classification variable holds the detected categories sorted
-    # print(classification)
-    # with open("results.txt", mode="w") as fh:
-    #    fh.write(classification)
+    result = ""
+    for class_naive in newsClassifier1.results:
+        result += class_naive + "\n"
+    result += "Time: " + str(end_time1) + "\n"
+    return result

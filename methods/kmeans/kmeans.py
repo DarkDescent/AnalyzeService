@@ -146,32 +146,32 @@ def main():
     clusters = kmeans.cluster()
     end_time = time.time()
 
+    result = ""
     for i, cluster in enumerate(clusters):
-        print "Cluster "+str(i+1)+":"
+        result += "Cluster "+str(i+1)+":\n"
         centroid = kmeans.centroids[i]['val']
-        print "Center: ", centroid
-        print "Num Points: ", len(cluster)
-        print "Points: "
+        result += "Center: " + str(centroid) + "\n"
+        result += "Num Points: " + str(len(cluster)) + "\n"
+        result += "Points: \n"
         maxdist = 0
         mindist = sys.maxint
         avgdist = 0
         for point in cluster:
-            if type(point[1]) == tuple: 
+            if type(point[1]) == tuple:
                 distance = kmeans.distance(centroid, point[1])
             else:
                 distance = kmeans.distance(centroid, point)
 
-            print point, ", distance=", distance
+            result += str(point) +  ", distance=", str(distance) + "\n"
             avgdist += distance
             if distance > maxdist:
                 maxdist = distance
             if distance < mindist:
                 mindist = distance
-        
-        print "Max distance: ", maxdist
-        print "Min distance: ", mindist
-        print "Avg distance: ", avgdist/len(cluster), "\n"
-    print 'Time taken: {}'.format(end_time - start_time)
 
-if __name__ == '__main__':
-    main()
+        result += "Max distance: " + str(maxdist) + "\n"
+        result += "Min distance: " + str(mindist) + "\n"
+        result += "Avg distance: " + str(avgdist/len(cluster)) + "\n"
+
+    result += 'Time taken: {}'.format(end_time - start_time)
+    return result

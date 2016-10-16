@@ -157,12 +157,13 @@ class NeuralNet:
         input_signals, derivatives = self.update( test_data, trace=True )
         out                        = input_signals[-1]
         error                      = self.cost_function(out, test_targets )
-        
-        print "[testing] Network error: %.4g" % error
-        print "[testing] Network results:"
-        print "[testing]   input\tresult\ttarget"
+
+        result = ""
+        result += "[testing] Network error: %.4g\n" % error
+        result += "[testing] Network results:\n"
+        result += "[testing]   input\tresult\ttarget\n"
         for name, entry, result, target in zip(test_names, test_data, out, test_targets):
-            print "[testing]   %s\t%s\t%s" % tuple(map(str, [name, entry, result, target]))
+            result += "[testing]   %s\t%s\t%s\n" % tuple(map(str, [name, entry, result, target]))
     #end
     
     
