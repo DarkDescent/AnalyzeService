@@ -111,8 +111,14 @@ class JobHandler(tornado.web.RequestHandler):
                 result = job.result
                 if (config.proxy_is_using): # при использовании прокси нужно передать этот параметр в заголовке вместе с адресом прокси
                     self.set_header("Access-Control-Allow-Origin", "http://" + config.proxy_host + ":" + config.proxy_port)
-                self.finish(json.dumps(result))
-                return
+                self.handler.set_header("Content-Description", 'File Transfer')
+                self.handler.set_header("Content-Disposition",
+                                        "attachment;filename=%s %s.txt" % (job.type, job_id))
+                self.handler.set_header("Content-Transfer-Encoding", "binary")
+                io = cStringIO.StringIO()
+                wb.save(io)
+                self.handler.finish(io.getvalue())
+                io.close()
         raise HTTPError(404)
 
     # функция позволяет удалить все задачи из Redis, которые ассоциированы с данным пользователем

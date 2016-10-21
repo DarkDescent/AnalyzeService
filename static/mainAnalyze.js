@@ -252,16 +252,19 @@ function ClearJobs(){
 
 function onSocketSuccess(data){
     var dataParsed = JSON.parse(data);
-    if (dataParsed["basic"]["langShort"] == "ru"){
-        var textStyle = wordCount(dataParsed["text"]);
-        $("#style").text(textStyle);
-    }
+    //if (dataParsed["basic"]["langShort"] == "ru"){
+    //    var textStyle = wordCount(dataParsed["text"]);
+    //    $("#style").text(textStyle);
+    //}
     // $("#text_area").text(dataParsed["text"]);
-    answerBasic(dataParsed["basic"]);
-    answerCognate(dataParsed["cognate"]);
-    answerAnnotate(dataParsed["annotate"]);
-    answerOrpho(dataParsed["orpho"]);
-    answerParser(dataParsed["parser"]);
+    //answerBasic(dataParsed["basic"]);
+    //answerCognate(dataParsed["cognate"]);
+    //answerAnnotate(dataParsed["annotate"]);
+    //answerOrpho(dataParsed["orpho"]);
+    //answerParser(dataParsed["parser"]);
+    if (dataParsed) {
+
+    }
 }
 
 function onClearSuccess(data){
