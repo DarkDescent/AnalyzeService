@@ -25,11 +25,11 @@ def normalize(number_list):
 
 # Training sets
 # training_one    = [ Instance( [0.1,0], [0, 1, 1] ), Instance( [0.5,1], [1, 1, 0] ), Instance( [1,0.6], [1, 0, 1] ), Instance( [1,1], [0, 1, 1] ) ]
-def main():
+def main(file_path):
     input_length = 0
 
     training_one = []
-    with open("Data10.csv", mode="r") as fh:
+    with open(file_path, mode="r") as fh:
         temp_data = []
         readed_data = csv.reader(fh, delimiter=',')
         for row in readed_data:

@@ -19,9 +19,9 @@ def resultCollector(result):
     results.append(result)
 
 
-def main():
+def main(file_path):
     data = []
-    with open("Data10.csv", mode="r") as fh:
+    with open(file_path, mode="r") as fh:
 
         readed_data = csv.reader(fh, delimiter=',')
         for row in readed_data:

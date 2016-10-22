@@ -7,6 +7,10 @@ import tornado.web
 import tornado.ioloop
 import tornado.httpserver
 from handlers.main_handler import MainHandler
+from handlers.file_handler import FileHandler
+from handlers.queue_handler import QueueHandler
+from handlers.queue_handler import SocketHandler
+from handlers.queue_handler import JobHandler
 import os
 
 settings = {
@@ -17,6 +21,10 @@ settings = {
 application = tornado.web.Application([
     (r"/", MainHandler),
     (r"/*static/(.*)", tornado.web.StaticFileHandler, {"path": "static"}),
+    (r"/*file/(.*)", FileHandler),
+    (r"/*queue/*", QueueHandler),
+    (r"/*websocket/*", SocketHandler),
+    (r"/*job/(.*)", JobHandler),
 ], **settings)
 
 #запускаем сервер

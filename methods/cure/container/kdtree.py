@@ -23,7 +23,7 @@
 
 import numpy
 
-from utils import euclidean_distance_sqrt
+from methods.cure.utils import euclidean_distance_sqrt
 
 class node:
     """!

@@ -165,18 +165,12 @@ class KMeans:
         return minCluster
 
 
-def main():
+def main(file_path):
     filename = 0
     threshold = 0
-
-    if len(sys.argv) > 3 or len(sys.argv) < 2:
-        print "Usage: python kmeans.py <filename> num_clusters"
-        return    
-    
-    if len(sys.argv) == 3:
-        numClusters = int(sys.argv[2])
+    numClusters = 5
     start_time = time.time()
-    kmeans = KMeans(sys.argv[1], numClusters)
+    kmeans = KMeans(file_path, numClusters)
     clusters = kmeans.cluster()
     end_time = time.time()
 

@@ -12,13 +12,16 @@ class Trainer(object):
         """
         enhances trained data using the given text and class
         """
-        self.data.increaseClass(className)
         
         #tokens = self.tokenizer.tokenize(text)
         with open(text, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=';')
             for row in reader:
                 for cell in row:
+                    if cell == "class":
+                        className = row[1]
+                        self.data.increaseClass(className)
+                        break
                     self.data.increaseToken(cell, className)
 
         #for token in tokens:

@@ -12,8 +12,6 @@ import re
 import shutil
 from os.path import expanduser
 
-import patoolib
-import textract
 import tornado.web
 from handlers.queue_handler import analyze
 from redis import Redis
@@ -33,29 +31,20 @@ class FileHandler(tornado.web.RequestHandler):
     @staticmethod
     def prepare_job(file_path, file_name, request_ip, method, p_check, is_archive, archive_name=u""):
         from handlers.queue_handler import job_ids
-        # достаем данные из текста
-        with open(file_path) as f:
-            data = f.read()
         # отправляем обработку текста python-rq
-        job = queue.enqueue_call(analyze, args=(data, method, p_check), result_ttl=-1)
+        job = queue.enqueue_call(analyze, args=(file_path, method, p_check), result_ttl=-1)
         result = {}
         # узнаем результат создания задачи - если не удалось, то отправляем сообщение об ошибке
         if not job:
-            result["text"] = u""
             result["isDone"] = False
             return result
         else:   # если получилось - запоминаем название отдельных файлов (будут названиями задачи на клиентской части
             job.meta["name"] = file_name
-            if is_archive:  # а также если мы знаем, что прислали архив - запоминаем название архива (сможем сгруппировать задачи на клиенте)
-                job.meta["archive"] = os.path.splitext(archive_name)[0]
-            else:
-                job.meta["archive"] = ""
             job.save()
             global job_ids
             # сохраняем id задачи, чтобы по нему можно было обращаться к списку задач
             job_ids.append((job.id, file, request_ip))
             # возвращаем переданный текст и результат создания задачи RQ
-            result["text"] = text
             result["isDone"] = True
             return result
 
@@ -85,37 +74,13 @@ class FileHandler(tornado.web.RequestHandler):
         if (config.proxy_is_using):
             self.set_header("Access-Control-Allow-Origin", "http://" + config.proxy_host + ":" + config.proxy_port)
 
-        # проверяем, если у нас расширение файла соответствует модулю Patool (архив)
-        if self.check_patool_ext(fname):
-            # разархивируем файлы во временную директорию
-            patoolib.extract_archive(__UPLOADS__ + u'/'+fname, outdir=(__UPLOADS__ + u"/tmp"), interactive=False)
-
-            # создаем возможность для прохода по файлам
-            walk = os.walk(__UPLOADS__ + u"/tmp")
-            isWork = True
-
-            # начинаем проходить по временной директории
-            for (dirpath, dirnames, filenames) in walk:
-                for file in filenames:
-                    # узнаем статус всех работ, если все хорошо, то отправляем последний текст, если возникли проблемы, передаем сообщение клиенту
-                    resultCheck = self.prepare_job(dirpath + u'/' + file, file, self.request.remote_ip, accuracy_ratio, prefix_check, True, archive_name=fname)
-                    isWork = isWork and resultCheck["isDone"]
-            # удаляем все файлы из временной директории
-            shutil.rmtree(__UPLOADS__ + u"/tmp")
-            if not isWork:
-                self.finish(u"Не все файлы удалось отправить в очередь")
-                return
-            else:
-                self.finish(resultCheck["text"])
-
+        # отправляем файл на обработку, если вернули текст, то отправляем его пользователю, в случае неуспеха - отправляем об этом сообщение клиенту
+        resultCheck = self.prepare_job(__UPLOADS__ + u'/' + fname, fname, self.request.remote_ip, method, prefix_check, False)
+        if not resultCheck["isDone"]:
+            self.finish(u"Не все файлы удалось отправить в очередь")
+            return
         else:
-            # отправляем файл на обработку, если вернули текст, то отправляем его пользователю, в случае неуспеха - отправляем об этом сообщение клиенту
-            resultCheck = self.prepare_job(__UPLOADS__ + u'/' + fname, fname, self.request.remote_ip, method, prefix_check, False)
-            if resultCheck["text"] == u"":
-                self.finish(u"Не все файлы удалось отправить в очередь")
-                return
-            else:
-                self.finish(resultCheck["text"])
+            self.finish(u"done")
 
 
     def post(self, action):

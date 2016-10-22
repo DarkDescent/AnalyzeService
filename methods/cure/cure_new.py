@@ -26,7 +26,6 @@ from utils import euclidean_distance_sqrt
 
 from container.kdtree import kdtree
 
-import core.wrapper as wrapper
 
 class cure_cluster:   
     """!
