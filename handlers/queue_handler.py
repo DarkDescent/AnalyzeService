@@ -34,8 +34,11 @@ def analyze(data_origin, method, prefix):
                "cure": cure_new,
                "neuron": main,
                "classification": newsclassifier}
-    return methods.get("method").main()
+    return methods.get(method).main(data_origin)
 
+
+# def print_smth():
+#     print "ABC"
 
 # класс отвечает за создание задачи и отправки ее в очередь (в случае, если текст был передан не через DragnDrop файла
 class QueueHandler(tornado.web.RequestHandler):
@@ -84,6 +87,12 @@ class QueueHandler(tornado.web.RequestHandler):
                 self.set_header("Access-Control-Allow-Origin", "http://" + config.proxy_host + ":" + config.proxy_port)
             self.finish(json.dumps(result))
 
+    # def get(self):
+    #     job = self.analyze_queue.enqueue_call(print_smth, args=(), result_ttl=-1)
+    #     print job
+    #     print "Something"
+
+
 # класс отвечает за получение информации о работе и очистки очередей из Redis
 class JobHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
@@ -111,14 +120,11 @@ class JobHandler(tornado.web.RequestHandler):
                 result = job.result
                 if (config.proxy_is_using): # при использовании прокси нужно передать этот параметр в заголовке вместе с адресом прокси
                     self.set_header("Access-Control-Allow-Origin", "http://" + config.proxy_host + ":" + config.proxy_port)
-                self.handler.set_header("Content-Description", 'File Transfer')
-                self.handler.set_header("Content-Disposition",
+                self.set_header("Content-Description", 'File Transfer')
+                self.set_header("Content-Disposition",
                                         "attachment;filename=%s %s.txt" % (job.type, job_id))
-                self.handler.set_header("Content-Transfer-Encoding", "binary")
-                io = cStringIO.StringIO()
-                wb.save(io)
-                self.handler.finish(io.getvalue())
-                io.close()
+                self.set_header("Content-Transfer-Encoding", "text")
+                self.finish()
         raise HTTPError(404)
 
     # функция позволяет удалить все задачи из Redis, которые ассоциированы с данным пользователем
@@ -174,7 +180,6 @@ class SocketHandler(websocket.WebSocketHandler):
                     job_ids.remove(job_id)
                     continue
                 result["name"] = job.meta["name"]   # получаем информацию о названии задачи
-                result["archive"] = job.meta["archive"] # получаем информацию об архиве (если текст был получен из заархивированного файла
                 if (job.is_failed == True): # если выполнение задачи провалилось
                     result["status"] = "failed"
                 elif (job.is_finished == True): # если задача выполнена
@@ -187,6 +192,9 @@ class SocketHandler(websocket.WebSocketHandler):
                 else:   # если задача начала выполняться
                     result["status"] = "started"
 
+                if result["name"] not in archives_info:
+                    archives_info[result["name"]] = []
+                archives_info[result["name"]].append(result.copy())
         self.write_message(json.dumps(archives_info))
 
     # обрабатываем ситуацию, когда клиент закрыл соединение с сервером

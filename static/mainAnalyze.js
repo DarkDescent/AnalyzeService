@@ -152,7 +152,7 @@ $(document).ready(function(){
             for (var key in results) {
                 if (results.hasOwnProperty(key)) {
                     var temp_result = results[key];
-                    if (temp_result[0]["archive"] == "") {
+                    if (!temp_result[0]["archive"]) {
                         for (var j = (temp_result.length - 1); j >= 0; j--) {
                             var result = temp_result[j];
                             if (result["status"] == "queued")

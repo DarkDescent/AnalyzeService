@@ -32,21 +32,8 @@ class FileHandler(tornado.web.RequestHandler):
     def prepare_job(file_path, file_name, request_ip, method, p_check, is_archive, archive_name=u""):
         from handlers.queue_handler import job_ids
         # отправляем обработку текста python-rq
-        job = queue.enqueue_call(analyze, args=(file_path, method, p_check), result_ttl=-1)
-        result = {}
-        # узнаем результат создания задачи - если не удалось, то отправляем сообщение об ошибке
-        if not job:
-            result["isDone"] = False
-            return result
-        else:   # если получилось - запоминаем название отдельных файлов (будут названиями задачи на клиентской части
-            job.meta["name"] = file_name
-            job.save()
-            global job_ids
-            # сохраняем id задачи, чтобы по нему можно было обращаться к списку задач
-            job_ids.append((job.id, file, request_ip))
-            # возвращаем переданный текст и результат создания задачи RQ
-            result["isDone"] = True
-            return result
+        return analyze(file_path, method=method, prefix=p_check)
+
 
     # метод проверяет, соответствует ли расширение файла модулю patool
     @staticmethod
@@ -76,11 +63,13 @@ class FileHandler(tornado.web.RequestHandler):
 
         # отправляем файл на обработку, если вернули текст, то отправляем его пользователю, в случае неуспеха - отправляем об этом сообщение клиенту
         resultCheck = self.prepare_job(__UPLOADS__ + u'/' + fname, fname, self.request.remote_ip, method, prefix_check, False)
-        if not resultCheck["isDone"]:
-            self.finish(u"Не все файлы удалось отправить в очередь")
-            return
-        else:
-            self.finish(u"done")
+
+        self.set_header('Content-Type', 'text/plain')
+        self.set_header("Content-Description", 'File Transfer')
+        self.set_header("Content-Disposition",
+                                'attachment;filename=%s.txt' % method)
+        self.write(resultCheck)
+        self.finish()
 
 
     def post(self, action):

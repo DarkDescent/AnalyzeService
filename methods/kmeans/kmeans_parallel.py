@@ -115,7 +115,7 @@ class KMeans:
 
     def recalc_centroids(self):
         pool = Pool()
-        for c_n in range(int(sys.argv[2])):
+        for c_n in range(5):
             pool.apply_async(self.rec_centroid, args=(c_n,), callback=self.resultCollector)
         pool.close()
         pool.join()
@@ -190,7 +190,7 @@ def main(file_path):
             else:
                 distance = kmeans.distance(centroid, point)
 
-            result += str(point) +  ", distance=", str(distance) + "\n"
+            result += ', '.join(point[1]) +  ", distance=" + str(distance) + "\n"
             avgdist += distance
             if distance > maxdist:
                 maxdist = distance
