@@ -155,6 +155,7 @@ $(document).ready(function() {
     };
 
     var answerUpload = function answerUpload(data) {
+        filename = data;
         $("#text_area").text(data);
         dropZone.removeClass('drop');
         dropZone.text("Загружено");
@@ -233,6 +234,7 @@ $(document).ready(function() {
     };
 
     var answerUpload = function answerUpload(data) {
+        filename = data;
         $("#text_area").text(data);
         dropZone.removeClass('drop');
         dropZone.text("Загружено");
@@ -311,6 +313,7 @@ $(document).ready(function() {
     };
 
     var answerUpload = function answerUpload(data) {
+        filename = data;
         $("#text_area").text(data);
         dropZone.removeClass('drop');
         dropZone.text("Загружено");
