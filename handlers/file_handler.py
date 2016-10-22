@@ -64,12 +64,14 @@ class FileHandler(tornado.web.RequestHandler):
         # отправляем файл на обработку, если вернули текст, то отправляем его пользователю, в случае неуспеха - отправляем об этом сообщение клиенту
         resultCheck = self.prepare_job(__UPLOADS__ + u'/' + fname, fname, self.request.remote_ip, method, prefix_check, False)
 
-        self.set_header('Content-Type', 'text/plain')
+        filename = "%s_%s.txt" %(method, fname)
+        self.set_header('Content-Type', 'application/octet-stream')
         self.set_header("Content-Description", 'File Transfer')
-        self.set_header("Content-Disposition",
-                                'attachment;filename=%s.txt' % method)
-        self.write(resultCheck)
-        self.finish()
+        self.set_header("Content-Disposition", 'attachment; filename=%s' % filename)
+        with open(filename, mode="w") as fw:
+            fw.write(resultCheck)
+        self.finish(filename)
+
 
 
     def post(self, action):
@@ -88,3 +90,16 @@ class FileHandler(tornado.web.RequestHandler):
         if (config.proxy_is_using):
             self.set_header("Access-Control-Allow-Origin", "http://" + config.proxy_host + ":" + config.proxy_port)
         self.finish("ok")
+
+    def get(self, action):
+        if action == "download":
+            filename = self.get_argument("filename")
+            if not filename:
+                self.finish()
+                return
+            self.set_header('Content-Type', 'application/octet-stream')
+            self.set_header("Content-Description", 'File Transfer')
+            self.set_header("Content-Disposition", 'attachment; filename=%s' % filename)
+            fr = open(filename, mode="r")
+            _buffer = fr.read()
+            self.finish(_buffer)

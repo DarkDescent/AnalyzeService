@@ -19,7 +19,7 @@ from tornado.web import HTTPError
 import config
 
 from methods.backpropagation import main
-from methods.cure import cure_new
+from methods.cure import clusters
 from methods.kmeans import kmeans_parallel
 from methods.naivebayes import newsclassifier
 
@@ -31,7 +31,7 @@ queue = Queue(config.queue_name, connection=redis)
 # метод, который будет передан в python-rq для worker-ов
 def analyze(data_origin, method, prefix):
     methods = {"kmeans": kmeans_parallel,
-               "cure": cure_new,
+               "cure": clusters,
                "neuron": main,
                "classification": newsclassifier}
     return methods.get(method).main(data_origin)

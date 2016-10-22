@@ -57,6 +57,6 @@ def main(file_path):
         common_list += result
     final_cure_object = cure(common_list, 5, pre_processed=True)
     final_cure_object.process()
-    result = final_cure_object.get_clusters() + '\n'
-    result += "Execution time (parallel): ", time.time() - start_time
+    result = "\n\n".join("\n".join(["\n".join(["\t".join([str(a) for a in y]) for y in x])for x in final_cure_object.get_clusters()]))
+    result += "Execution time (parallel): " + str(time.time() - start_time)
     return result

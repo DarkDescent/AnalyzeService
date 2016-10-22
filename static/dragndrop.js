@@ -72,9 +72,16 @@ $(document).ready(function() {
     };
 
     var answerUpload = function answerUpload(data) {
-        $("#text_area").text(data);
+        filename = data;
         dropZone.removeClass('drop');
         dropZone.text("Загружено");
+        window.location = "http://" + host_url + port_url + "/file/download?filename=" + filename;
+        dropZone.text("Кластерный анализ (k-средних)");
+        //$.ajax({
+        //    url: "http://" + host_url + port_url + "/file/download",
+        //    data: {"filename": data},
+        //    method: "GET"
+        //});
     };
     var error = function error(data) {
         $("#text_area").text("Произошла ошибка! " + data);
@@ -151,6 +158,8 @@ $(document).ready(function() {
         $("#text_area").text(data);
         dropZone.removeClass('drop');
         dropZone.text("Загружено");
+        window.location = "http://" + host_url + port_url + "/file/download?filename=" + filename;
+        dropZone.text("Кластерный анализ (CURE)");
     };
     var error = function error(data) {
         $("#text_area").text("Произошла ошибка! " + data);
@@ -227,6 +236,8 @@ $(document).ready(function() {
         $("#text_area").text(data);
         dropZone.removeClass('drop');
         dropZone.text("Загружено");
+        window.location = "http://" + host_url + port_url + "/file/download?filename=" + filename;
+        dropZone.text("Классификация");
     };
     var error = function error(data) {
         $("#text_area").text("Произошла ошибка! " + data);
@@ -303,6 +314,8 @@ $(document).ready(function() {
         $("#text_area").text(data);
         dropZone.removeClass('drop');
         dropZone.text("Загружено");
+        window.location = "http://" + host_url + port_url + "/file/download?filename=" + filename;
+        dropZone.text("Нейронные сети (обратное распространение ошибки)");
     };
     var error = function error(data) {
         $("#text_area").text("Произошла ошибка! " + data);
